@@ -26,11 +26,14 @@
         }
         body {
             position: relative; /* Enable positioning for the pseudo-element */
-            margin: 0; /* Remove default margin */
+            margin: auto; /* Remove default margin */
             max-width: 1000px;
-        }
-        body {
             font-family: Arial; /* Use Arial with a fallback to sans-serif */
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            align-items: center;    /* Center items horizontally */
+            justify-content: flex-start; /* Start from the top */
+            height: 200vh;         /* Full viewport height */
         }
               
         h1, .message, #total-items {
@@ -102,6 +105,14 @@
         const SHEET_ID = "10MAqJIdKYYfKWnbFpqSDPzK_irw_SStI6GcMjcWk5LA"; //'YOUR_SHEET_ID'; // Replace with your Google Sheet ID
         const RANGE = 'H2:L'; // Column K
         const RANGEF= 'F2:F';
+
+        function count(array, match) {
+            // return (array || []).filter(row => row[0] === match && row[4] !== "כפול").length;
+            return array.reduce((count, row) => {
+                return (row[0] === match && row[4] !== "כפול") ? count + 1 : count;
+            }, 0);
+            
+        }
         function sortNames(names) {
             // Use filter to separate English and other names
             const englishNames = names.filter(name => !!name && /^[A-Za-z]/.test(name[0]));
@@ -123,8 +134,8 @@
                 values.forEach(value => { if (!value) return;
                     $('#data-container').append(`<div class="item">${value}</div>`);
                 });
-                const numRT = (data.values || []).filter(row => row[0] === "מאשר פרסום בראשי תיבות" && row[4] !== "כפול").length;
-                const numNP = (data.values || []).filter(row => row[0] === "לא מאשר פרסום חתימתי" && row[4] !== "כפול").length;
+                const numRT = count(data.values, "מאשר פרסום בראשי תיבות");
+                const numNP = count(data.values, "לא מאשר פרסום חתימתי");
                 $('#total-items').text(`סה"כ חתימות: ${totalCount + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי.`);
             }).fail(function() {
                 $('#data-container').append('<div class="item">Error fetching data.</div>');
