@@ -100,7 +100,7 @@
         //             background-image: url("https://www.reali.org.il/wp-content/uploads/2021/08/updatedLogo_trans-596x321.png"); /* Replace with the URL of your background image */
         const API_KEY = 'AIzaSyA0ViwpPn0pYS9McISloz0J1-u5rpMWhP8'; //'YOUR_API_KEY'; // Replace with your API key
         const SHEET_ID = "10MAqJIdKYYfKWnbFpqSDPzK_irw_SStI6GcMjcWk5LA"; //'YOUR_SHEET_ID'; // Replace with your Google Sheet ID
-        const RANGE = 'K2:K'; // Column K
+        const RANGE = 'H2:L'; // Column K
         const RANGEF= 'F2:F';
         function sortNames(names) {
             // Use filter to separate English and other names
@@ -118,18 +118,19 @@
         $(document).ready(function() {
             $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`, function(data) {
                 const values = sortNames(
-                    (data.values || []).map(row => !!row[0]? row[0].trim():"")) // Get values from the first column
+                    (data.values || []).map(row => !!row[3]? row[3].trim():"")) // Get values from the first column
                 const totalCount = values.length;
-                $('#total-items').text(`סה"כ חתימות (כרגע): ${totalCount}`);
                 values.forEach(value => { if (!value) return;
                     $('#data-container').append(`<div class="item">${value}</div>`);
                 });
+                const numRT = (data.values || []).filter(row => row[0] === "מאשר פרסום בראשי תיבות" && row[4] !== "כפול").length;
+                const numNP = (data.values || []).filter(row => row[0] === "לא מאשר פרסום חתימתי" && row[4] !== "כפול").length;
+                $('#total-items').text(`סה"כ חתימות: ${totalCount + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי.`);
             }).fail(function() {
                 $('#data-container').append('<div class="item">Error fetching data.</div>');
             });
             $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGEF}?key=${API_KEY}`, function(data) {
                 const dataValues = (data.values || []).map(row => typeof row[0] === 'string' ? row[0].trim(): String(row[0]))
-                    .filter(v => !!v) // Get values from the first column
                     // Count occurrences
                 const counts = dataValues.reduce((acc, value) => {
                     acc[value] = (acc[value] || 0) + 1;
