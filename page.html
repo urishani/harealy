@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data from Google Sheets</title>
+    <style>
+
+        #top-left-image {
+            position: absolute; /* Position it absolutely within the body */
+            top: 10px; /* Adjust the distance from the top */
+            left: 10px; /* Adjust the distance from the left */
+            width: 20%; /* Set the width to 10% of the container */
+            z-index: 4; /* Ensure it is above other elements */
+        }
+        body {
+            position: relative; /* Enable positioning for the pseudo-element */
+            margin: 0; /* Remove default margin */
+        }
+        
+        body::before {
+            content: "";
+            position: absolute; /* Position it absolutely within the body */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /*background-image: url('https://www.reali.org.il/wp-content/uploads/2021/08/updatedLogo_trans-596x321.png'); /* Replace with the URL */
+            background-size: contain; /* Adjust size */
+            background-repeat: no-repeat; /* Prevents repeating */
+            background-position: top; /* Centers the image */
+            z-index: 1; /* Set z-index for the image */
+        }
+        
+        body::after {
+            content: "";
+            position: absolute; /* Position it absolutely within the body */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 165, 0, 0.25); /* Semi-transparent overlay */
+            z-index: 2; /* Higher z-index to sit on top of the image */
+        }
+        h1, .message, #total-items {
+            position: relative; /* Ensure these elements are positioned relative */
+            z-index: 3; /* Higher z-index to appear above the background */
+            text-align: center; /* Center text */
+        }
+        .message {
+            width: 50%; /* 2/3 of the width */
+            margin: 0 auto; /* Center the element */
+            text-align: center; /* Center the text */
+            margin-bottom: 20px; /* Space below the message */
+            font-size: 1.5rem;
+        }
+        .message p {
+            margin: 15px 0; /* Space between paragraphs */
+        }
+        p {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            z-index: 3;
+            direction: rtl;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto; /* Scrollable if content is long */
+        }
+        .item {
+            padding: 2px 10px;
+            text-align: right;
+        }
+        #total-items {
+            padding: 5px 10px; /* Add padding around the text */
+            border: 2px solid #333; /* Border around the text */
+            display: inline-block; /* Make the border wrap tightly around the text */
+            font-weight: bold; /* Optionally make the text bold */
+            background-color: white;
+            margin: 5px 100px;
+        }    </style>
+</head>
+<body dir="rtl">
+    <img src="https://www.reali.org.il/wp-content/uploads/2021/08/updatedLogo_trans-596x321.png" alt="Logo" id="top-left-image">
+    <h1>בוגרי ובוגרות הריאלי תומכים בשחרור החטופים</h1>
+    <div class="message">
+        <p>אנו, בוגרי ביה"ס הריאלי העברי ובוגרי הפנימיה הצבאית בחיפה, חונכנו על ערכי מגילת העצמאות, המקדשת חיים ומבטיחה חופש ביטוי ומצפון לכל אזרח.</p>
+        <p>אנו רואים בדאגה רבה את המשך המלחמה והפקרת החטופים בעזה, ואת הניסיונות להשתקת המחאה והביקורת של אזרחי ישראל.</p>
+        <p>אנו מוטרדים מהתערבותם של מפקד חיל האוויר והרמטכ"ל וניסיונם להגביל את חופש הביטוי והמצפון של אלה שאינם בשרות מילואים.</p>
+        <p>אנו קוראים לראש הממשלה לגלות מנהיגות מאחדת ולפעול לריפוי ושיקום החברה, כמרכיב מוביל בביטחון המדינה.</p>
+        <p>מעל לכל, אנו קוראים לממשלה לפעול להחזרה מידית של כל החטופים שנותרו בשבי החמאס ולהפסקת המלחמה המקיזה את דם בנינו. </p>
+    </div>
+    <div id="total-items"></div>
+    <div class="container" id="data-container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        //             background-image: url("https://www.reali.org.il/wp-content/uploads/2021/08/updatedLogo_trans-596x321.png"); /* Replace with the URL of your background image */
+        const API_KEY = 'AIzaSyA0ViwpPn0pYS9McISloz0J1-u5rpMWhP8'; //'YOUR_API_KEY'; // Replace with your API key
+        const SHEET_ID = "10MAqJIdKYYfKWnbFpqSDPzK_irw_SStI6GcMjcWk5LA"; //'YOUR_SHEET_ID'; // Replace with your Google Sheet ID
+        const RANGE = 'K2:K'; // Column K
+
+        $(document).ready(function() {
+            $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`, function(data) {
+                const values = data.values || [];
+                const sortedValues = values
+                    .map(row => row[0]) // Get values from the first column
+                    .filter(value => value) // Filter out empty values
+                    .sort(); // Sort the values
+                const totalCount = sortedValues.length;
+                $('#total-items').text(`סה"כ חתימות: ${totalCount}`);
+                sortedValues.forEach(value => { if (!value) return;
+                    $('#data-container').append(`<div class="item">${value}</div>`);
+                });
+            }).fail(function() {
+                $('#data-container').append('<div class="item">Error fetching data.</div>');
+            });
+        });
+    </script>
+</body>
+</html>
