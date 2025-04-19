@@ -39,13 +39,13 @@
             font-family: Arial; /* Use Arial with a fallback to sans-serif */
         }
 
-        h1 {padding-top: 40px;}
+        h1 {padding-top: 30px;}
         .message {
-            width: 50%; /* 2/3 of the width */
+            width: 70%; /* 2/3 of the width */
             margin: 0 auto; /* Center the element */
             text-align: center; /* Center the text */
             margin-bottom: 20px; /* Space below the message */
-            font-size: 1.5rem;
+            font-size: 1rem;
             font-weight: bold;
         }
         .message p {
@@ -73,7 +73,6 @@
         }
         #total-items {
             padding: 5px 10px; /* Add padding around the text */
-            border: 2px solid #333; /* Border around the text */
             display: inline-block; /* Make the border wrap tightly around the text */
             font-weight: bold; /* Optionally make the text bold */
             background-color: white;
@@ -100,17 +99,26 @@
         const API_KEY = 'AIzaSyA0ViwpPn0pYS9McISloz0J1-u5rpMWhP8'; //'YOUR_API_KEY'; // Replace with your API key
         const SHEET_ID = "10MAqJIdKYYfKWnbFpqSDPzK_irw_SStI6GcMjcWk5LA"; //'YOUR_SHEET_ID'; // Replace with your Google Sheet ID
         const RANGE = 'K2:K'; // Column K
-
+        function sortNames(names) {
+            // Use filter to separate English and other names
+            const englishNames = names.filter(name => !!name && /^[A-Za-z]/.test(name[0]));
+            const otherNames = names.filter(name => !!name && !/^[A-Za-z]/.test(name[0]));
+        
+            // Sort both lists
+            englishNames.sort();
+            otherNames.sort();
+        
+            // Combine the lists with English names at the end
+            return otherNames.concat(englishNames);
+        }
+        
         $(document).ready(function() {
             $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`, function(data) {
-                const values = data.values || [];
-                const sortedValues = values
-                    .map(row => row[0]) // Get values from the first column
-                    .filter(value => value) // Filter out empty values
-                    .sort(); // Sort the values
-                const totalCount = sortedValues.length;
+                const values = sortNames(
+                    (data.values || []).map(row => !!row[0]? row[0].trim():"")) // Get values from the first column
+                const totalCount = values.length;
                 $('#total-items').text(`סה"כ חתימות (כרגע): ${totalCount}`);
-                sortedValues.forEach(value => { if (!value) return;
+                values.forEach(value => { if (!value) return;
                     $('#data-container').append(`<div class="item">${value}</div>`);
                 });
             }).fail(function() {
