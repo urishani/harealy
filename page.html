@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data from Google Sheets</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
 
         .transparent-bg {
@@ -92,6 +93,7 @@
     </div>
     <div id="total-items"></div>
     <div class="container" id="data-container"></div>
+    <canvas id="myHistogram" width="400" height="200"></canvas>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -99,6 +101,7 @@
         const API_KEY = 'AIzaSyA0ViwpPn0pYS9McISloz0J1-u5rpMWhP8'; //'YOUR_API_KEY'; // Replace with your API key
         const SHEET_ID = "10MAqJIdKYYfKWnbFpqSDPzK_irw_SStI6GcMjcWk5LA"; //'YOUR_SHEET_ID'; // Replace with your Google Sheet ID
         const RANGE = 'K2:K'; // Column K
+        const RANGEF= 'F2:F';
         function sortNames(names) {
             // Use filter to separate English and other names
             const englishNames = names.filter(name => !!name && /^[A-Za-z]/.test(name[0]));
@@ -124,7 +127,41 @@
             }).fail(function() {
                 $('#data-container').append('<div class="item">Error fetching data.</div>');
             });
+            $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGEF}?key=${API_KEY}`, function(data) {
+                const dataValues = (data.values || []).map(row => typeof row[0] === 'string' ? row[0].trim(): String(row[0]))
+                    .filter(v => !!v) // Get values from the first column
+                    // Count occurrences
+                const counts = dataValues.reduce((acc, value) => {
+                    acc[value] = (acc[value] || 0) + 1;
+                    return acc;
+                }, {});
+                        // Prepare data for the histogram
+                const labels = Object.keys(counts);
+                const values = Object.values(counts);
+                // Create the histogram
+                const ctx = document.getElementById('myHistogram').getContext('2d');
+                const myHistogram = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'דיאגרמת חותמים פר מחזור',
+                            data: values,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }).fail(function(e) {
+                console.error(`Error fetching data. ${RANGEF} err: ${e}`);
+            });
         });
-    </script>
+</script>
 </body>
 </html>
