@@ -6,47 +6,36 @@
     <title>Data from Google Sheets</title>
     <style>
 
-        #top-left-image {
-            position: absolute; /* Position it absolutely within the body */
-            top: 10px; /* Adjust the distance from the top */
-            left: 10px; /* Adjust the distance from the left */
-            width: 20%; /* Set the width to 10% of the container */
+        .transparent-bg {
+            background-image: url('./protest-bet-biram.jpeg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: top; /* Centers the image */
+            opacity: 0.25; /* Adjust the opacity (0 is fully transparent, 1 is fully opaque) */
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+        #center-image {
+            position: relative; /* Keep it relative */
+            width: 20%; /* Set the width */
+            margin: 0 auto; /* Center the image horizontally */
+            display: block; /* Ensure it behaves like a block element */
             z-index: 1; /* Ensure it is above other elements */
         }
         body {
             position: relative; /* Enable positioning for the pseudo-element */
             margin: 0; /* Remove default margin */
+            max-width: 1000px;
         }
-        
-        body::before {
-            content: "";
-            position: absolute; /* Position it absolutely within the body */
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('./protest-bet-biram.jpeg'); /* Replace with the URL */
-            background-size: contain; /* Adjust size */
-            background-repeat: no-repeat; /* Prevents repeating */
-            background-position: top; /* Centers the image */
-            z-index: 1; /* Set z-index for the image */
-        }
-        
-        body::after {
-            content: "";
-            position: absolute; /* Position it absolutely within the body */
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 165, 0, 0.25); /* Semi-transparent overlay */
-            z-index: 2; /* Higher z-index to sit on top of the image */
-        }
+              
         h1, .message, #total-items {
             position: relative; /* Ensure these elements are positioned relative */
             z-index: 3; /* Higher z-index to appear above the background */
             text-align: center; /* Center text */
         }
+
+        h1 {padding-top: 40px;}
         .message {
             width: 50%; /* 2/3 of the width */
             margin: 0 auto; /* Center the element */
@@ -63,10 +52,11 @@
             margin-bottom: 20px;
         }
         .container {
+            position: relative;
             z-index: 3;
             direction: rtl;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 0px;
             padding: 20px;
             max-height: 80vh;
@@ -86,8 +76,9 @@
         }    </style>
 </head>
 <body dir="rtl">
-    <img src="./semel-harealy.png" alt="Logo" id="top-left-image">
+    <div class="transparent-bg"></div>
     <h1>בוגרי ובוגרות הריאלי תומכים בשחרור החטופים</h1>
+    <img src="./semel-harealy.png" alt="Logo" id="center-image">
     <div class="message">
         <p>אנו, בוגרי ביה"ס הריאלי העברי ובוגרי הפנימיה הצבאית בחיפה, חונכנו על ערכי מגילת העצמאות, המקדשת חיים ומבטיחה חופש ביטוי ומצפון לכל אזרח.</p>
         <p>אנו רואים בדאגה רבה את המשך המלחמה והפקרת החטופים בעזה, ואת הניסיונות להשתקת המחאה והביקורת של אזרחי ישראל.</p>
@@ -113,7 +104,7 @@
                     .filter(value => value) // Filter out empty values
                     .sort(); // Sort the values
                 const totalCount = sortedValues.length;
-                $('#total-items').text(`סה"כ חתימות: ${totalCount}`);
+                $('#total-items').text(`סה"כ חתימות (כרגע): ${totalCount}`);
                 sortedValues.forEach(value => { if (!value) return;
                     $('#data-container').append(`<div class="item">${value}</div>`);
                 });
