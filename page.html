@@ -28,11 +28,15 @@
             margin: 0; /* Remove default margin */
             max-width: 1000px;
         }
+        body {
+            font-family: Arial; /* Use Arial with a fallback to sans-serif */
+        }
               
         h1, .message, #total-items {
             position: relative; /* Ensure these elements are positioned relative */
             z-index: 3; /* Higher z-index to appear above the background */
             text-align: center; /* Center text */
+            font-family: Arial; /* Use Arial with a fallback to sans-serif */
         }
 
         h1 {padding-top: 40px;}
@@ -46,6 +50,7 @@
         }
         .message p {
             margin: 15px 0; /* Space between paragraphs */
+            font-family: Arial; /* Use Arial with a fallback to sans-serif */
         }
         p {
             text-align: center;
