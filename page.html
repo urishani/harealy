@@ -170,14 +170,14 @@
                         }]
                     },
                     options: {
-                        plugins: {
-                            datalabels: {
-                                anchor: 'end',
-                                align: 'end',
-                                formatter: (value) => value
-                            }
-                        },
                         scales: {
+                            x: {
+                                ticks: {
+                                    autoSkip: false, // Prevent skipping labels
+                                    maxRotation: 45, // Rotate labels to 45 degrees
+                                    minRotation: 45  // Ensure minimum rotation is also 45 degrees
+                                }
+                            },
                             y: {
                                 beginAtZero: true
                             }
