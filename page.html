@@ -175,16 +175,15 @@
                                 ticks: {
                                     autoSkip: true, // Prevent skipping labels
                                     maxRotation: 90, // Rotate labels to 45 degrees
-                                    //minRotation: 45,  // Ensure minimum rotation is also 45 degrees
+                                    minRotation: 90,  // Ensure minimum rotation is also 45 degrees
                                     callback: function(value, index, values) {
                                         // Show the last label always
                                         if (index === values.length - 1) {
-                                            return value;
+                                            return values[index];
                                         }
                                         // Skip every second label or customize as needed
-                                        return (index % 2 === 0) ? value : '';
+                                        return (index % 2 === 0) ? values[index] : '';
                                     }
-        
                                 }
                             },
                             y: {
