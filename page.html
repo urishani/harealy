@@ -100,11 +100,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        //             background-image: url("https://www.reali.org.il/wp-content/uploads/2021/08/updatedLogo_trans-596x321.png"); /* Replace with the URL of your background image */
-        const API_KEY = 'AIzaSyA0ViwpPn0pYS9McISloz0J1-u5rpMWhP8'; //'YOUR_API_KEY'; // Replace with your API key
-        const SHEET_ID = "10MAqJIdKYYfKWnbFpqSDPzK_irw_SStI6GcMjcWk5LA"; //'YOUR_SHEET_ID'; // Replace with your Google Sheet ID
-        const RANGE = 'H2:L'; // Column K
-        const RANGEF= 'F2:F';
 
         function count(array, match) {
             // return (array || []).filter(row => row[0] === match && row[4] !== "כפול").length;
@@ -138,8 +133,7 @@
                 return (differenceInMinutes === 1) ? 'עודכן לפני דקה' : `עודכן לפני ${differenceInMinutes} דקות`; // e.g., "2 minutes ago"
             }
         }
-        
-        
+         
         $(document).ready(function() {
             // $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`, function(data) {
             $.get('https://urishani.github.io/harealy/output.json', function(data) {
