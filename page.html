@@ -173,9 +173,18 @@
                         scales: {
                             x: {
                                 ticks: {
-                                    autoSkip: false, // Prevent skipping labels
+                                    autoSkip: true, // Prevent skipping labels
                                     maxRotation: 45, // Rotate labels to 45 degrees
-                                    minRotation: 45  // Ensure minimum rotation is also 45 degrees
+                                    minRotation: 45,  // Ensure minimum rotation is also 45 degrees
+                                    callback: function(value, index, values) {
+                                        // Show the last label always
+                                        if (index === values.length - 1) {
+                                            return value;
+                                        }
+                                        // Skip every second label or customize as needed
+                                        return index % 2 === 0 ? value : '';
+                                    }
+        
                                 }
                             },
                             y: {
