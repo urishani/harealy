@@ -142,7 +142,7 @@
         
         $(document).ready(function() {
             // $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`, function(data) {
-            $.get('https://urishani.github.com/output.json', function(data) {
+            $.get('https://urishani.github.io/harealy/output.json', function(data) {
                 const {names, total, numRT, numNP, time, counts} = data;
                 const totalCount = data.count;
                 names.forEach(name => { if (!name) return;
@@ -151,7 +151,7 @@
                 //const numRT = data.numRT; //(data.values, "מאשר פרסום בראשי תיבות");
                 //const numNP = data.numRT; //count(data.values, "לא מאשר פרסום חתימתי");
                 //const time = data.time;
-                $('#total-items').text(`סה"כ חתימות: ${totalCount + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי. ${timeAgo(time)}`);
+                $('#total-items').text(`סה"כ חתימות: ${total + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי. ${timeAgo(time)}`);
 
                 // Prepare data for the histogram
                 //const counts = data.counts;
