@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data from Google Sheets</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+
+        .transparent-bg {
+            background-image: url('./protest-bet-biram.jpeg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: top; /* Centers the image */
+            opacity: 0.25; /* Adjust the opacity (0 is fully transparent, 1 is fully opaque) */
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+        #center-image {
+            position: relative; /* Keep it relative */
+            width: 20%; /* Set the width */
+            margin: 0 auto; /* Center the image horizontally */
+            display: block; /* Ensure it behaves like a block element */
+            z-index: 1; /* Ensure it is above other elements */
+        }
+        body {
+            position: relative; /* Enable positioning for the pseudo-element */
+            margin: auto; /* Remove default margin */
+            max-width: 1000px;
+            font-family: Arial; /* Use Arial with a fallback to sans-serif */
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            align-items: center;    /* Center items horizontally */
+            justify-content: flex-start; /* Start from the top */
+            height: 200vh;         /* Full viewport height */
+        }
+              
+        h1, .message, #total-items {
+            position: relative; /* Ensure these elements are positioned relative */
+            z-index: 3; /* Higher z-index to appear above the background */
+            text-align: center; /* Center text */
+            font-family: Arial; /* Use Arial with a fallback to sans-serif */
+        }
+
+        h1 {padding-top: 30px;}
+        .message {
+            width: 70%; /* 2/3 of the width */
+            margin: 0 auto; /* Center the element */
+            text-align: center; /* Center the text */
+            margin-bottom: 20px; /* Space below the message */
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        .message p {
+            margin: 15px 0; /* Space between paragraphs */
+            font-family: Arial; /* Use Arial with a fallback to sans-serif */
+        }
+        p {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            position: relative;
+            z-index: 3;
+            direction: rtl;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto; /* Scrollable if content is long */
+        }
+        .item {
+            padding: 2px 10px;
+            text-align: right;
+        }
+        #total-items {
+            padding: 5px 10px; /* Add padding around the text */
+            display: inline-block; /* Make the border wrap tightly around the text */
+            font-weight: bold; /* Optionally make the text bold */
+            background-color: white;
+            margin: 5px 100px;
+        }    </style>
+</head>
+<body dir="rtl">
+    <div class="transparent-bg"></div>
+    <h1>בוגרי ובוגרות הריאלי תומכים בשחרור החטופים</h1>
+    <img src="./semel-harealy.png" alt="Logo" id="center-image">
+    <div class="message">
+        <p>אנו, בוגרי ביה"ס הריאלי העברי ובוגרי הפנימיה הצבאית בחיפה, חונכנו על ערכי מגילת העצמאות, המקדשת חיים ומבטיחה חופש ביטוי ומצפון לכל אזרח.</p>
+        <p>אנו רואים בדאגה רבה את המשך המלחמה והפקרת החטופים בעזה, ואת הניסיונות להשתקת המחאה והביקורת של אזרחי ישראל.</p>
+        <p>אנו מוטרדים מהתערבותם של מפקד חיל האוויר והרמטכ"ל וניסיונם להגביל את חופש הביטוי והמצפון של אלה שאינם בשרות מילואים.</p>
+        <p>אנו קוראים לראש הממשלה לגלות מנהיגות מאחדת ולפעול לריפוי ושיקום החברה, כמרכיב מוביל בביטחון המדינה.</p>
+        <p>מעל לכל, אנו קוראים לממשלה לפעול להחזרה מידית של כל החטופים שנותרו בשבי החמאס ולהפסקת המלחמה המקיזה את דם בנינו. </p>
+    </div>
+    <div id="total-items"></div>
+    <div class="container" id="data-container"></div>
+    <canvas id="myHistogram" width="400" height="100"></canvas>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        //             background-image: url("https://www.reali.org.il/wp-content/uploads/2021/08/updatedLogo_trans-596x321.png"); /* Replace with the URL of your background image */
+        const API_KEY = 'AIzaSyA0ViwpPn0pYS9McISloz0J1-u5rpMWhP8'; //'YOUR_API_KEY'; // Replace with your API key
+        const SHEET_ID = "10MAqJIdKYYfKWnbFpqSDPzK_irw_SStI6GcMjcWk5LA"; //'YOUR_SHEET_ID'; // Replace with your Google Sheet ID
+        const RANGE = 'H2:L'; // Column K
+        const RANGEF= 'F2:F';
+
+        function count(array, match) {
+            // return (array || []).filter(row => row[0] === match && row[4] !== "כפול").length;
+            return array.reduce((count, row) => {
+                return (row[0] === match && row[4] !== "כפול") ? count + 1 : count;
+            }, 0);
+            
+        }
+        function sortNames(names) {
+            // Use filter to separate English and other names
+            const englishNames = names.filter(name => !!name && /^[A-Za-z]/.test(name[0]));
+            const otherNames = names.filter(name => !!name && !/^[A-Za-z]/.test(name[0]));
+        
+            // Sort both lists
+            englishNames.sort();
+            otherNames.sort();
+        
+            // Combine the lists with English names at the end
+            return otherNames.concat(englishNames);
+        }
+
+        function timeAgo(milliseconds) {
+            if (!milliseconds) return;
+            const now = Date.now(); // Current time in milliseconds
+            const differenceInSeconds = Math.floor((now - milliseconds) / 1000);
+                
+            if (differenceInSeconds < 60) {
+                return 'עודכן זה עתה'; // Less than a minute ago
+            } else {
+                const differenceInMinutes = Math.floor(differenceInSeconds / 60);
+                return (differenceInMinutes === 1) ? 'עודכן לפני דקה' : `עודכן לפני ${differenceInMinutes} דקות`; // e.g., "2 minutes ago"
+            }
+        }
+        
+        
+        $(document).ready(function() {
+            // $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`, function(data) {
+            $.get('https://urishani.github.io/harealy/output.json', function(data) {
+                const {names, total, numRT, numNP, time, counts} = data;
+                const totalCount = data.count;
+                names.forEach(name => { if (!name) return;
+                    $('#data-container').append(`<div class="item">${name}</div>`);
+                });
+                //const numRT = data.numRT; //(data.values, "מאשר פרסום בראשי תיבות");
+                //const numNP = data.numRT; //count(data.values, "לא מאשר פרסום חתימתי");
+                //const time = data.time;
+                $('#total-items').text(`סה"כ חתימות: ${total + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי. ${timeAgo(time)}`);
+
+                // Prepare data for the histogram
+                //const counts = data.counts;
+                const labels = Object.keys(counts);
+                const values = Object.values(counts);
+                // Create the histogram
+                const ctx = document.getElementById('myHistogram').getContext('2d');
+                const myHistogram = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'דיאגרמת חותמים לפי שנת מחזור',
+                            data: values,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                ticks: {
+                                    autoSkip: false, // Prevent skipping labels
+                                    maxRotation: 45, // Rotate labels to 45 degrees
+                                    minRotation: 45,  // Ensure minimum rotation is also 45 degrees
+                                    callback: function(value, index, values) {
+                                        // Show the last label always
+                                        if (index === values.length - 1) {
+                                            return labels[index];
+                                        }
+                                        // Skip every second label or customize as needed
+                                        return (index % 2 === 0) ? labels[index] : '';
+                                    }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }).fail(function(e) {
+                console.error(`Error fetching data. ${RANGEF} err: ${e}`);
+            });
+        });
+</script>
+</body>
+</html>
