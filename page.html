@@ -179,10 +179,10 @@
                                     callback: function(value, index, values) {
                                         // Show the last label always
                                         if (index === values.length - 1) {
-                                            return values[index];
+                                            return labels[index];
                                         }
                                         // Skip every second label or customize as needed
-                                        return (index % 2 === 0) ? values[index] : '';
+                                        return (index % 2 === 0) ? labels[index] : '';
                                     }
                                 }
                             },
