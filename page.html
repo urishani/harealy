@@ -155,7 +155,7 @@
 
                 // Prepare data for the histogram
                 //const counts = data.counts;
-                const labels = Object.keys(counts);
+                const labels = Object.keys(counts).map(l => l || "לא צויינה");
                 const values = Object.values(counts);
                 // Create the histogram
                 const ctx = document.getElementById('myHistogram').getContext('2d');
