@@ -170,6 +170,13 @@
                         }]
                     },
                     options: {
+                        plugins: {
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end',
+                                formatter: (value) => value
+                            }
+                        },
                         scales: {
                             y: {
                                 beginAtZero: true
