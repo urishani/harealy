@@ -173,9 +173,9 @@
                         scales: {
                             x: {
                                 ticks: {
-                                    autoSkip: true, // Prevent skipping labels
-                                    maxRotation: 90, // Rotate labels to 45 degrees
-                                    minRotation: 90,  // Ensure minimum rotation is also 45 degrees
+                                    autoSkip: false, // Prevent skipping labels
+                                    maxRotation: 45, // Rotate labels to 45 degrees
+                                    minRotation: 45,  // Ensure minimum rotation is also 45 degrees
                                     callback: function(value, index, values) {
                                         // Show the last label always
                                         if (index === values.length - 1) {
