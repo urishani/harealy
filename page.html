@@ -135,7 +135,7 @@
                 return 'עודכן זה עתה'; // Less than a minute ago
             } else {
                 const differenceInMinutes = Math.floor(differenceInSeconds / 60);
-                return (differenceInMinutes !== 1) ? 'עודכן לפני דקה' : `עודכן לפני ${differenceInMinutes} דקות`; // e.g., "2 minutes ago"
+                return (differenceInMinutes === 1) ? 'עודכן לפני דקה' : `עודכן לפני ${differenceInMinutes} דקות`; // e.g., "2 minutes ago"
             }
         }
         
