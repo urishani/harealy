@@ -127,14 +127,15 @@
         }
 
         function timeAgo(milliseconds) {
+            if (!milliseconds) return;
             const now = Date.now(); // Current time in milliseconds
             const differenceInSeconds = Math.floor((now - milliseconds) / 1000);
                 
             if (differenceInSeconds < 60) {
-                return 'זה עתה'; // Less than a minute ago
+                return 'עודכן זה עתה'; // Less than a minute ago
             } else {
                 const differenceInMinutes = Math.floor(differenceInSeconds / 60);
-                return `${differenceInMinutes} ${differenceInMinutes !== 1 ? 'דקה' : 'דקות'} לפני`; // e.g., "2 minutes ago"
+                return (differenceInMinutes !== 1) ? 'עודכן לפני דקה' : `עודכן לפני ${differenceInMinutes} דקות`; // e.g., "2 minutes ago"
             }
         }
         
