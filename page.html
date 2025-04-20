@@ -142,27 +142,19 @@
         
         $(document).ready(function() {
             // $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`, function(data) {
-            $.get('https://urishani.github.com/output.jso', function(data) {
-                const values = data.values;
+            $.get('https://urishani.github.com/output.json', function(data) {
+                const {names, total, numRT, numNP, time, counts} = data;
                 const totalCount = data.count;
-                values.forEach(value => { if (!value) return;
-                    $('#data-container').append(`<div class="item">${value}</div>`);
+                names.forEach(name => { if (!name) return;
+                    $('#data-container').append(`<div class="item">${name}</div>`);
                 });
-                const numRT = data.numRT; //(data.values, "מאשר פרסום בראשי תיבות");
-                const numNP = data.numRT; //count(data.values, "לא מאשר פרסום חתימתי");
-                const time = data.time;
-                $('#total-items').text(`סה"כ חתימות: ${totalCount + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי.`);
-            }).fail(function() {
-                $('#data-container').append('<div class="item">Error fetching data.</div>');
-            });
-            $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGEF}?key=${API_KEY}`, function(data) {
-                const dataValues = (data.values || []).map(row => typeof row[0] === 'string' ? row[0].trim(): String(row[0]))
-                    // Count occurrences
-                const counts = dataValues.reduce((acc, value) => {
-                    acc[value] = (acc[value] || 0) + 1;
-                    return acc;
-                }, {});
-                        // Prepare data for the histogram
+                //const numRT = data.numRT; //(data.values, "מאשר פרסום בראשי תיבות");
+                //const numNP = data.numRT; //count(data.values, "לא מאשר פרסום חתימתי");
+                //const time = data.time;
+                $('#total-items').text(`סה"כ חתימות: ${totalCount + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי. ${timeAgo(time)}`);
+
+                // Prepare data for the histogram
+                //const counts = data.counts;
                 const labels = Object.keys(counts);
                 const values = Object.values(counts);
                 // Create the histogram
