@@ -1126,6 +1126,7 @@
 רייטר, צביקה
 רייך, דני
 רייכמן- שמריהו, ענת
+ריינהורן, יונתן
 רייס, דוד
 רייס, יובל
 רייצס, עופר
@@ -1291,6 +1292,7 @@ G.C.
 Hadar, Ron
 Haller, Carmit
 Levinson, Mira
+NADEL, AMNON
 Weissberger, Hanna
 argaman, avital
 bregman, limor
