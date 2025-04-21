@@ -134,8 +134,9 @@
         }
         $(document).ready(function() {
             // $.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`, function(data) {
-            $.get('https://urishani.github.io/harealy/output.json', function(data) {
-                const {names, total, numRT, numNP, time, counts} = data;
+            //$.get('https://urishani.github.io/harealy/output.json', function(data) {
+            $.get('./output.json', function(data) {
+                        const {names, total, numRT, numNP, time, counts} = data;
                 const totalCount = data.count;
                 names.forEach(name => { if (!name) return;
                     $('#data-container').append(`<div class="item">${name}</div>`);
