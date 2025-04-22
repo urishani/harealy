@@ -119,7 +119,7 @@
         }
         function sortNames(names) {
             // Use filter to separate English and other names
-            const englishNames = names.filter(name => !!name && /^[A-Za-z]/.test(name[0]));
+            const englishNames = names.filter(name => !!name && /^[A-Za-z()\- ]/.test(name[0]));
             const otherNames = names.filter(name => !!name && !/^[A-Za-z]/.test(name[0]));
         
             // Sort both lists
