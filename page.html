@@ -157,7 +157,7 @@
                 //const numRT = data.numRT; //(data.values, "מאשר פרסום בראשי תיבות");
                 //const numNP = data.numRT; //count(data.values, "לא מאשר פרסום חתימתי");
                 //const time = data.time;
-                $('#total-items').text(`סה"כ חתימות: ${total + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי. ${timeAgo(time)}`);
+                setInterval(()=> {$('#total-items').text(`סה"כ חתימות: ${total + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי. ${timeAgo(time)}`)}, 10000);
 
                 // Prepare data for the histogram
                 //const counts = data.counts;
