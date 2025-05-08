@@ -143,7 +143,16 @@
                 return 'עודכן זה עתה'; // Less than a minute ago
             } else {
                 const differenceInMinutes = Math.floor(differenceInSeconds / 60);
-                return (differenceInMinutes === 1) ? 'עודכן לפני דקה' : `עודכן לפני ${differenceInMinutes} דקות`; // e.g., "2 minutes ago"
+                const differenceInHours = Math.floor(differenceInMinutes / 60);
+                const differenceInDays = Math.floor(differenceInHours/24);
+                let text = '';
+                if (differenceInDays > 0) 
+                    text = differenceInDays === 1 ? "יום" : `${differenceInDays} ימים`;
+                else if (differenceInHours > 0)
+                    text = differenceInHours === 1 ? "שעה" : `${differenceInHours} שעות`;
+                else
+                    text = differenceInMinutes === 1 ? "דקה" : `${differenceInMinutes} דקות`;
+                return "עודכן לפני " + text;
             }
         }
         $(document).ready(function() {
