@@ -109,7 +109,7 @@
         <p> בוגר הריאלי? בבקשה הצטרף פה: <a href="https://forms.gle/k23gJrRjsrRf5SLeA"><b>עצומה של בוגרי הריאלי</b></a></p>   
     </div>
     <div id="total-items"></div>
-    <div class="container" id="data-container"></div>
+    <div class="message" style="width:100%" id="data-container"></div>
     <canvas id="myHistogram" width="400" height="100"></canvas>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -160,9 +160,11 @@
             //$.get('./output.json', function(data) {
                         const {names, total, numRT, numNP, time, counts} = data;
                 const totalCount = data.count;
-                names.forEach(name => { if (!name) return;
-                    $('#data-container').append(`<div class="item">${name}</div>`);
-                });
+                const names2 = names.filter(n => n.length > 4);
+                $('#data-container').text(names2.join("; "));
+//                names.forEach(name => { if (!name) return;
+//                    $('#data-container').append(`<div class="item">${name}</div>`);
+//                });
                 //const numRT = data.numRT; //(data.values, "מאשר פרסום בראשי תיבות");
                 //const numNP = data.numRT; //count(data.values, "לא מאשר פרסום חתימתי");
                 //const time = data.time;
