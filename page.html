@@ -109,6 +109,10 @@
         <p> בוגר הריאלי? בבקשה הצטרף פה: <a href="https://forms.gle/k23gJrRjsrRf5SLeA"><b>עצומה של בוגרי הריאלי</b></a></p>   
     </div>
     <div id="total-items"></div>
+    <div id="warning" style="z-index: 10; font-size: 3REM; color: red; border: 3px black solid; background-color: white; text-align: center; margin: auto;">
+        תקלה בטעינת הנתונים. נא לשלוח התראה ל
+        <a href="mailto:uri.shani@gmail.com?subject=problem%20with%20Azuma%20report">mailto:uri.shani@gmail.com</a>    </div>
+        <p>נכון ל-<span id="date"></span></p>
     <div class="message" style="width:100%" id="data-container"></div>
     <canvas id="myHistogram" width="400" height="100"></canvas>
 
@@ -158,18 +162,23 @@
         $(document).ready(function() {
             $.get('https://urishani.github.io/harealy/output.json', function(data) {
             //$.get('./output.json', function(data) {
-                        const {names, total, numRT, numNP, time, counts} = data;
+                const {names, total, numRT, numNP, time, counts} = data;
                 const totalCount = data.count;
                 const names2 = names.filter(n => n.length > 4);
-                $('#data-container').text(names2.join("; "));
+                function timeDetail() {$('#total-items').text(`סה"כ חתימות: ${total + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי. ${timeAgo(time)}`)}
+                if (!total || total < 100) {
+                    $('#warning').show();
+                } else {
+                    $('#warning').hide();
+                    $('#data-container').text(names2.join("; "));
+                    timeDetail(); (timeDetail, 10000);
+                }
 //                names.forEach(name => { if (!name) return;
 //                    $('#data-container').append(`<div class="item">${name}</div>`);
 //                });
                 //const numRT = data.numRT; //(data.values, "מאשר פרסום בראשי תיבות");
                 //const numNP = data.numRT; //count(data.values, "לא מאשר פרסום חתימתי");
                 //const time = data.time;
-                function timeDetail() {$('#total-items').text(`סה"כ חתימות: ${total + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי. ${timeAgo(time)}`)}
-                timeDetail(); (timeDetail, 10000);
 
                 // Prepare data for the histogram
                 //const counts = data.counts;
