@@ -116,7 +116,7 @@
         <a href="mailto:uri.shani@gmail.com?subject=problem%20with%20Azuma%20report">mailto:uri.shani@gmail.com</a>    </div>
         <p>נכון ל-<span id="date"></span></p>
     <div class="message" style="width:100%" id="data-container"></div>
-    <canvas id="myHistogram" width="400" height="100" class="message"></canvas>
+    <canvas id="myHistogram" width="400" height="150" class="message"></canvas>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -169,6 +169,7 @@
                 $('#total-items').hide();
                 $('#warning').hide();
                 $('#azumalink').hide();
+                $('#myHistogram').height(200); // Double the chart height
             }
             $.get('https://urishani.github.io/harealy/output.json', function(data) {
             //$.get('./output.json', function(data) {
@@ -229,7 +230,7 @@
                             y: {
                                 beginAtZero: true,
                                 ticks: {
-                                    color: '#111' // dark black
+                                    color: '#111', // dark black
                                 }
                             }
                         },
