@@ -106,7 +106,8 @@
         <p>אנו קוראים לראש הממשלה לגלות מנהיגות מאחדת ולפעול לריפוי ושיקום החברה, כמרכיב מוביל בביטחון המדינה.</p>
         <p>מעל לכל, אנו קוראים לממשלה לפעול להחזרה מידית של כל החטופים שנותרו בשבי החמאס ולהפסקת המלחמה המקיזה את דם בנינו. </p>
     <br>
-        <p> בוגר הריאלי? בבקשה הצטרף פה: <a href="https://forms.gle/k23gJrRjsrRf5SLeA"><b>עצומה של בוגרי הריאלי</b></a></p>   
+        <p id="azumalink"> בוגר הריאלי? בבקשה הצטרף פה: <a href="https://forms.gle/k23gJrRjsrRf5SLeA"><b>עצומה של בוגרי הריאלי</b></a>
+        </p>   
     </div>
     <div id="total-items"></div>
     <div id="warning" style="z-index: 10; font-size: 3REM; color: red; border: 3px black solid; background-color: white; text-align: center; margin: auto;">
@@ -114,7 +115,7 @@
         <a href="mailto:uri.shani@gmail.com?subject=problem%20with%20Azuma%20report">mailto:uri.shani@gmail.com</a>    </div>
         <p>נכון ל-<span id="date"></span></p>
     <div class="message" style="width:100%" id="data-container"></div>
-    <canvas id="myHistogram" width="400" height="100"></canvas>
+    <canvas id="myHistogram" width="400" height="100" class="message"></canvas>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -160,18 +161,28 @@
             }
         }
         $(document).ready(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hideNames = urlParams.has('nonames');
+            if (hideNames) {
+                $('#data-container').hide();
+                $('#total-items').hide();
+                $('#warning').hide();
+                $('#azumalink').hide();
+            }
             $.get('https://urishani.github.io/harealy/output.json', function(data) {
             //$.get('./output.json', function(data) {
                 const {names, total, numRT, numNP, time, counts} = data;
                 const totalCount = data.count;
                 const names2 = names.filter(n => n.length > 4);
                 function timeDetail() {$('#total-items').text(`סה"כ חתימות: ${total + numNP} מתוכן ${numRT} בראשי תיבות, ו ${numNP} בשם חסוי. ${timeAgo(time)}`)}
-                if (!total || total < 100) {
-                    $('#warning').show();
-                } else {
-                    $('#warning').hide();
-                    $('#data-container').text(names2.join("; "));
-                    timeDetail(); (timeDetail, 10000);
+                if (!hideNames) {
+                    if (!total || total < 100) {
+                        $('#warning').show();
+                    } else {
+                        $('#warning').hide();
+                        $('#data-container').text(names2.join("; "));
+                        timeDetail(); (timeDetail, 10000);
+                    }
                 }
 //                names.forEach(name => { if (!name) return;
 //                    $('#data-container').append(`<div class="item">${name}</div>`);
@@ -193,13 +204,14 @@
                         datasets: [{
                             label: 'דיאגרמת חותמים לפי שנת מחזור',
                             data: values,
-                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            backgroundColor: 'rgba(0, 32, 96, 0.85)', // dark blue
                         }]
                     },
                     options: {
                         scales: {
                             x: {
                                 ticks: {
+                                    color: '#111', // dark black
                                     autoSkip: false, // Prevent skipping labels
                                     maxRotation: 45, // Rotate labels to 45 degrees
                                     minRotation: 45,  // Ensure minimum rotation is also 45 degrees
@@ -214,7 +226,17 @@
                                 }
                             },
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#111' // dark black
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#111' // dark black
+                                }
                             }
                         }
                     }
