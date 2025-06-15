@@ -33,7 +33,8 @@
             flex-direction: column; /* Stack items vertically */
             align-items: center;    /* Center items horizontally */
             justify-content: flex-start; /* Start from the top */
-            height: 200vh;         /* Full viewport height */
+            min-height: 100vh; /* Ensure at least full viewport height */
+            height: auto;      /* Let content determine height */
         }
               
         h1, .message, #total-items {
