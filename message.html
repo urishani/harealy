@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Text in New Tab</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 24px 32px 24px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            direction: rtl;
+        }
+        textarea {
+            width: 50%;
+            height: 350px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            line-height: 1.2;
+            resize: vertical;
+            text-align: right;
+            direction: rtl;
+            padding: 16px;
+        }
+        button {
+            padding: 14px 28px;
+            font-size: 20px;
+            border-radius: 8px;
+            min-width: 180px;
+            max-width: 320px;
+            width: auto;
+            align-self: flex-start;
+            text-align: right;
+            direction: rtl;
+            margin-bottom: 12px;
+        }
+        h1, #instructions {
+            align-self: flex-end;
+            text-align: right;
+            direction: rtl;
+            width: 100%;
+        }
+    </style>
+<script>
+const message = `*נכנסים תחת האלונקה*
+* אנו בוגרי הריאלי והפנימיה הצבאית, פועלים להקמת קבוצה רחבה מתוכנו וכל מי שמעוניין, שתהווה כוח עזר אפקטיבי ותשתתף בהתנדבות בסיוע לגופים א-פוליטיים ופוליטיים, שחרטו על דגלם תיקון ושיקום.
+* יצרנו קשר עם גופים וארגונים רבים המשוועים לעזרה במגוון תחומים, ואשר ישמחו להציג את עצמם ולשתף אותנו בצרכיהם.
+* רשימת הפעילויות הנדרשות תוצג בפני הקבוצה באופן שוטף. כל אחד.ת מבינינו, בהתאם לעמדותיו, כישוריו האישיים ורצונו, יוכל להתנדב לפעילויות השונות באופן עצמאי או בקבוצה.
+
+אם ברצונך לקחת חלק במאמץ לשיפור המצב במדינה, הצטרפ.י בקישור להלן לקבוצת וואטסאפ "פעילים לתיקון ושיקום" שתזרים מידע ועדכונים.
+
+* במידה ותעדיפ.י לקבל מידע נוסף לפני שתחליט.י להצטרף - השיב.י לי בשאלות הבהרה פה בצ'אט או בפרטי. 
+* במידה שאינך מעוניינ.ת להצטרף כרגע, נשמח לשמוע ממך שוב בעתיד בעניין זה.
+
+* להצטרפות לקבוצה: 
+https://chat.whatsapp.com/FT1b0d6k2a3c4g5h7i8j9k
+
+*ביחד, נעשה את השינוי*
+
+נא שתפו והפיצו בכל הכח בין בוגרי הריאלי והפנימיה ואחרים שמעוניינים לעזור
+
+בברכה, 
+דני בן-דב, דניאלה מבור, דוד שדה, אורי שני,
+ בוגרי מחזור מ"ט 1968.`;
+function copyToClipboard() {
+    const textarea = document.getElementById('message');
+    textarea.select();
+    document.execCommand('copy');
+    document.getElementById('instructions').style.display = 'block';
+}
+window.onload = function() {
+    document.getElementById('message').value = message;
+};
+
+</script>
+
+</head>
+<body>
+<h1>הכנת הודעה להפצה</h1>
+<button onclick="copyToClipboard()"><i class="fas fa-copy icon"></i> העתק הודעה</button>
+
+<p id="instructions" style="display:none">הודעה העתקה, עכשיו אפשר להדביק אותה בוואטסאפ או בכל אפליקציה אחרת.
+</p>
+<textarea id="message">
+   
+
+</textarea>
+
+</body>
+</html>
+
+
